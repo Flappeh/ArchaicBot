@@ -1,10 +1,3 @@
-"""
-Copyright © Krypton 2019-Present - https://github.com/kkrypt0nn (https://krypton.ninja)
-Description:
-🐍 A simple template to start to code your own and personalized Discord bot in Python
-
-Version: 6.2.0
-"""
 
 import platform
 import random
@@ -86,6 +79,7 @@ class General(commands.Cog, name="general"):
     @commands.hybrid_command(
         name="help", description="List all commands the bot has loaded."
     )
+    @app_commands.guilds(discord.Object(id = "1067267825804267552"))
     async def help(self, context: Context) -> None:
         prefix = self.bot.config["prefix"]
         embed = discord.Embed(

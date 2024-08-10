@@ -1,13 +1,5 @@
-"""
-Copyright © Krypton 2019-Present - https://github.com/kkrypt0nn (https://krypton.ninja)
-Description:
-🐍 A simple template to start to code your own and personalized Discord bot in Python
-
-Version: 6.2.0
-"""
 
 import json
-import logging
 import os
 import platform
 import random
@@ -17,9 +9,11 @@ import aiosqlite
 import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import Context
-from dotenv import load_dotenv
+from modules.environment import BOT_TOKEN
 
 from database import DatabaseManager
+
+from modules.utils import logger
 
 if not os.path.isfile(f"{os.path.realpath(os.path.dirname(__file__))}/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
@@ -61,65 +55,12 @@ intents.presences = True
 """
 
 intents = discord.Intents.default()
-
-"""
-Uncomment this if you want to use prefix (normal) commands.
-It is recommended to use slash commands and therefore not use prefix commands.
-
-If you want to use prefix commands, make sure to also enable the intent below in the Discord developer portal.
-"""
-# intents.message_content = True
+intents.message_content = True
+intents.presences = True
+intents.members = True
 
 # Setup both of the loggers
 
-
-class LoggingFormatter(logging.Formatter):
-    # Colors
-    black = "\x1b[30m"
-    red = "\x1b[31m"
-    green = "\x1b[32m"
-    yellow = "\x1b[33m"
-    blue = "\x1b[34m"
-    gray = "\x1b[38m"
-    # Styles
-    reset = "\x1b[0m"
-    bold = "\x1b[1m"
-
-    COLORS = {
-        logging.DEBUG: gray + bold,
-        logging.INFO: blue + bold,
-        logging.WARNING: yellow + bold,
-        logging.ERROR: red,
-        logging.CRITICAL: red + bold,
-    }
-
-    def format(self, record):
-        log_color = self.COLORS[record.levelno]
-        format = "(black){asctime}(reset) (levelcolor){levelname:<8}(reset) (green){name}(reset) {message}"
-        format = format.replace("(black)", self.black + self.bold)
-        format = format.replace("(reset)", self.reset)
-        format = format.replace("(levelcolor)", log_color)
-        format = format.replace("(green)", self.green + self.bold)
-        formatter = logging.Formatter(format, "%Y-%m-%d %H:%M:%S", style="{")
-        return formatter.format(record)
-
-
-logger = logging.getLogger("discord_bot")
-logger.setLevel(logging.INFO)
-
-# Console handler
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(LoggingFormatter())
-# File handler
-file_handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
-file_handler_formatter = logging.Formatter(
-    "[{asctime}] [{levelname:<8}] {name}: {message}", "%Y-%m-%d %H:%M:%S", style="{"
-)
-file_handler.setFormatter(file_handler_formatter)
-
-# Add the handlers
-logger.addHandler(console_handler)
-logger.addHandler(file_handler)
 
 
 class DiscordBot(commands.Bot):
@@ -283,11 +224,26 @@ class DiscordBot(commands.Bot):
                 color=0xE02B2B,
             )
             await context.send(embed=embed)
+        elif isinstance(error, commands.CommandNotFound):
+            embed = discord.Embed(
+                title="Error!",
+                # We need to capitalize because the command arguments have no capital letter in the code and they are the first word in the error message.
+                description=str(error).capitalize(),
+                color=0xE02B2B,
+            )
+            await context.send(embed=embed)
+            
         else:
             raise error
 
 
-load_dotenv()
 
-bot = DiscordBot()
-bot.run(os.getenv("TOKEN"))
+
+if __name__ == '__main__':
+    try:
+        bot = DiscordBot()
+        while True:
+            bot.run(BOT_TOKEN)
+    except KeyboardInterrupt:
+        bot.close()
+        exit()
