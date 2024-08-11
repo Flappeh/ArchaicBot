@@ -253,5 +253,4 @@ if __name__ == '__main__':
         while True:
             bot.run(BOT_TOKEN)
     except KeyboardInterrupt:
-        bot.close()
         exit()
