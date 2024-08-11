@@ -2,13 +2,14 @@ from discord.ext import commands
 from discord.ext.commands import Context
 from discord import File
 import discord
-from modules.environment import WELCOME_CHANNEL_ID, LEAVE_CHANNEL_ID
+from modules.environment import CHANNEL_WELCOME, CHANNEL_LEAVE, ROLE_ADMIN
 from bot import DiscordBot
 from modules.utils import logger
 from easy_pil import Editor, load_image_async, Font
 import os
 import random
-
+from captcha.image import ImageCaptcha
+import string
 class JoinLeave(commands.Cog, name="joinleave"):
     def __init__(self, bot: DiscordBot) -> None:
         self.bot = bot
@@ -19,7 +20,7 @@ class JoinLeave(commands.Cog, name="joinleave"):
         for file in os.listdir(f"{os.path.dirname(os.path.dirname(__file__))}/resources/image"):
             if file.startswith("background"):
                 self.images.append(f"{os.path.dirname(os.path.dirname(__file__))}/resources/image/{file}")
-                
+         
     async def getImageBackground(self, member: discord.Member):
         background = Editor(random.choice(self.images))
         profile_image = await load_image_async(str(member.avatar.url))
@@ -40,38 +41,66 @@ class JoinLeave(commands.Cog, name="joinleave"):
         file = File(fp=background.image_bytes, filename="pic.jpg")
         
         return file
+
+    @commands.hybrid_command(
+        name="captcha",
+        description="Test send captcha"
+    )
+    async def send_captcha_verification(self, context: Context) -> None:
+        try:
+            image = ImageCaptcha(width=280,height=90)
+            code = ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits) for _ in range(6))
+            captcha_text = str(code)
+            data = image.generate(captcha_text)
+            
+            role_verified = discord.utils.get(context.guild.roles, name="Verified")
+            
+            if role_verified in context.author.roles:
+                await context.reply(f"You are already verified!", ephemeral=True)
+            else:
+                await context.reply(f"Check your DM", ephemeral=True)
+                
+                image.write(captcha_text, 'captcha/CAPTCHA.png')
+                
+                await context.author.send("Write what the captcha has")
+            
+        except Exception as e:
+            print(e)
     
     @commands.hybrid_command(
         name="testimage",
         description="Test send image",
     )
-    @commands.is_owner()
-    async def botinfo(self, context: Context) -> None:
+    @commands.has_role(ROLE_ADMIN)
+    async def test_image(self, context: Context) -> None:
         """
         Test sending image to the server
         """
-        file = await self.getImageBackground(context.author)
-        await context.send(file=file)
+        try:
+            file = await self.getImageBackground(context.author)
+            await context.send(file=file)
+        except Exception as e:
+            raise Exception(e)
     
     @commands.Cog.listener(name="on_member_join")
-    async def on_member_join(self, member: discord.member) -> None:
+    async def on_member_join(self, member: discord.Member) -> None:
         """
         This runs everytime a user joins the server
         """
         channel = None
         file = None
         try:
-            channel = self.bot.get_channel(int(WELCOME_CHANNEL_ID))
+            channel = self.bot.get_channel(CHANNEL_WELCOME)
             file = await self.getImageBackground(member)
         except commands.ChannelNotFound as e:
             logger.error(f"Error retrieving welcome channel with id : {channel}")
             raise commands.ChannelNotFound(f"Unable to retrieve welcome channel from id : {e}")
         embed = discord.Embed(
-            description=f"**New User Joined!** Welcome {member}",
-            color=0xE02B2B,
+            description=f"**New User Joined!** Welcome {member.mention}",
+            color=0x14e4ef,
         )
-        await channel.send(embed=embed)
         await channel.send(file=file)
+        await channel.send(embed=embed)
         
     @commands.Cog.listener(name="on_member_remove")
     async def on_member_remove(self, member: discord.Member) -> None:
@@ -81,17 +110,17 @@ class JoinLeave(commands.Cog, name="joinleave"):
         channel = None
         file = None
         try:
-            channel = self.bot.get_channel(int(LEAVE_CHANNEL_ID))
+            channel = self.bot.get_channel(CHANNEL_LEAVE)
             file = await self.getImageBackground(member)
         except commands.ChannelNotFound as e:
             logger.error(f"Error retrieving welcome channel with id : {channel}")
             raise commands.ChannelNotFound(f"Unable to retrieve welcome channel from id : {e}")
         embed = discord.Embed(
             description=f"**User Left!** Bye {member}",
-            color=0xE02B2B,
+            color=0xd62e11,
         )
-        await channel.send(embed=embed)
         await channel.send(file=file)
+        await channel.send(embed=embed)
         
 
 
