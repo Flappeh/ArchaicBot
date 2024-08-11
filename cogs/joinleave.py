@@ -10,6 +10,7 @@ import os
 import random
 from captcha.image import ImageCaptcha
 import string
+
 class JoinLeave(commands.Cog, name="joinleave"):
     def __init__(self, bot: DiscordBot) -> None:
         self.bot = bot
@@ -41,31 +42,6 @@ class JoinLeave(commands.Cog, name="joinleave"):
         file = File(fp=background.image_bytes, filename="pic.jpg")
         
         return file
-
-    @commands.hybrid_command(
-        name="captcha",
-        description="Test send captcha"
-    )
-    async def send_captcha_verification(self, context: Context) -> None:
-        try:
-            image = ImageCaptcha(width=280,height=90)
-            code = ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits) for _ in range(6))
-            captcha_text = str(code)
-            data = image.generate(captcha_text)
-            
-            role_verified = discord.utils.get(context.guild.roles, name="Verified")
-            
-            if role_verified in context.author.roles:
-                await context.reply(f"You are already verified!", ephemeral=True)
-            else:
-                await context.reply(f"Check your DM", ephemeral=True)
-                
-                image.write(captcha_text, 'captcha/CAPTCHA.png')
-                
-                await context.author.send("Write what the captcha has")
-            
-        except Exception as e:
-            print(e)
     
     @commands.hybrid_command(
         name="testimage",
