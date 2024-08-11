@@ -5,5 +5,5 @@ import os
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-WELCOME_CHANNEL_ID = os.getenv("WELCOME_CHANNEL_ID")
-LEAVE_CHANNEL_ID = os.getenv("LEAVE_CHANNEL_ID")
+CHANNEL_WELCOME = int(os.getenv("CHANNEL_WELCOME"))
+CHANNEL_LEAVE = int(os.getenv("CHANNEL_LEAVE"))

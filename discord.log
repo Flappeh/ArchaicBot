@@ -1,0 +1,22 @@
+[2024-08-11 18:26:52] [INFO    ] discord_bot: Logged in as Archaic Bot
+[2024-08-11 18:26:52] [INFO    ] discord_bot: discord.py API version: 2.4.0
+[2024-08-11 18:26:52] [INFO    ] discord_bot: Python version: 3.11.6
+[2024-08-11 18:26:52] [INFO    ] discord_bot: Running on: Windows 10 (nt)
+[2024-08-11 18:26:52] [INFO    ] discord_bot: -------------------
+[2024-08-11 18:26:52] [INFO    ] discord_bot: Loaded extension 'fun'
+[2024-08-11 18:26:52] [INFO    ] discord_bot: Loaded extension 'general'
+[2024-08-11 18:26:53] [INFO    ] discord_bot: Loaded extension 'joinleave'
+[2024-08-11 18:26:53] [INFO    ] discord_bot: Loaded extension 'moderation'
+[2024-08-11 18:26:53] [INFO    ] discord_bot: Loaded extension 'owner'
+[2024-08-11 18:26:53] [INFO    ] discord_bot: Loaded extension 'template'
+[2024-08-11 18:26:53] [INFO    ] discord_bot: Loaded extension 'verifier'
+[2024-08-11 18:27:04] [INFO    ] discord_bot: Executed sync command in MaServer (ID: 1067267825804267552) by flappeh (ID: 201678872004132864)
+[2024-08-11 18:29:43] [INFO    ] discord_bot: Executed reload command in MaServer (ID: 1067267825804267552) by flappeh (ID: 201678872004132864)
+[2024-08-11 18:30:57] [INFO    ] discord_bot: Executed reload command in MaServer (ID: 1067267825804267552) by flappeh (ID: 201678872004132864)
+[2024-08-11 18:31:37] [INFO    ] discord_bot: Executed reload command in MaServer (ID: 1067267825804267552) by flappeh (ID: 201678872004132864)
+[2024-08-11 18:34:03] [INFO    ] discord_bot: Executed reload command in MaServer (ID: 1067267825804267552) by flappeh (ID: 201678872004132864)
+[2024-08-11 18:34:28] [INFO    ] discord_bot: Executed verify command in MaServer (ID: 1067267825804267552) by flappeh (ID: 201678872004132864)
+[2024-08-11 18:35:08] [INFO    ] discord_bot: Executed sync command by flappeh (ID: 201678872004132864) in DMs
+[2024-08-11 18:35:38] [INFO    ] discord_bot: Executed verify command in MaServer (ID: 1067267825804267552) by flappeh (ID: 201678872004132864)
+[2024-08-11 18:41:37] [INFO    ] discord_bot: Executed reload command in MaServer (ID: 1067267825804267552) by flappeh (ID: 201678872004132864)
+[2024-08-11 18:41:48] [INFO    ] discord_bot: Executed verify command in MaServer (ID: 1067267825804267552) by flappeh (ID: 201678872004132864)

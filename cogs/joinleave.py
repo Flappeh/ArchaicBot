@@ -2,7 +2,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 from discord import File
 import discord
-from modules.environment import WELCOME_CHANNEL_ID, LEAVE_CHANNEL_ID
+from modules.environment import CHANNEL_WELCOME, CHANNEL_LEAVE
 from bot import DiscordBot
 from modules.utils import logger
 from easy_pil import Editor, load_image_async, Font
@@ -61,7 +61,7 @@ class JoinLeave(commands.Cog, name="joinleave"):
         channel = None
         file = None
         try:
-            channel = self.bot.get_channel(int(WELCOME_CHANNEL_ID))
+            channel = self.bot.get_channel(CHANNEL_WELCOME)
             file = await self.getImageBackground(member)
         except commands.ChannelNotFound as e:
             logger.error(f"Error retrieving welcome channel with id : {channel}")
@@ -81,7 +81,7 @@ class JoinLeave(commands.Cog, name="joinleave"):
         channel = None
         file = None
         try:
-            channel = self.bot.get_channel(int(LEAVE_CHANNEL_ID))
+            channel = self.bot.get_channel(CHANNEL_LEAVE)
             file = await self.getImageBackground(member)
         except commands.ChannelNotFound as e:
             logger.error(f"Error retrieving welcome channel with id : {channel}")
