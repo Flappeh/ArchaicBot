@@ -1,11 +1,14 @@
 from discord.ext import commands
 from discord.ext.commands import Context
+from discord import app_commands
 import discord
 from captcha.image import ImageCaptcha
 import random
 from bot import DiscordBot
 import string
 import os
+from modules.environment import ROLE_ADMIN
+from modules.buttons import VerifyButton
 
 # Here we name the cog and create a new class for the cog.
 class Verifier(commands.Cog, name="verifier"):
@@ -57,6 +60,18 @@ class Verifier(commands.Cog, name="verifier"):
             else:
                 await context.author.send("Incorrect captcha")
 
+    @commands.hybrid_command(
+        name="insert_verify",
+        description= "Send verify message to a channel"
+    )
+    @commands.has_role(ROLE_ADMIN)
+    @app_commands.describe(
+        channel="Channel to send to"
+    )
+    async def send_verify(self, context: Context, channel: discord.TextChannel) -> None:
+        channel = context.guild.get_channel(channel.id)
+        await channel.send(content="Button", view=VerifyButton())
+        
 # And then we finally add the cog to the bot so that it can load, unload, reload and use it's content.
 async def setup(bot) -> None:
     await bot.add_cog(Verifier(bot))
