@@ -64,7 +64,7 @@ intents.members = True
 
 
 class DiscordBot(commands.Bot):
-    def __init__(self) -> None:
+    def __init__(self: commands.Bot) -> None:
         super().__init__(
             command_prefix=commands.when_mentioned_or(config["prefix"]),
             intents=intents,
@@ -240,10 +240,18 @@ class DiscordBot(commands.Bot):
                 color=0xE02B2B,
             )
             await context.send(embed=embed)
-            
+        elif isinstance(error, commands.NoPrivateMessage):
+            embed = discord.Embed(
+                title="Error!",
+                # We need to capitalize because the command arguments have no capital letter in the code and they are the first word in the error message.
+                description=str(error).capitalize(),
+                color=0xE02B2B,
+            )
+            await context.send(embed=embed)
         else:
             raise error
-
+    async def close(self):
+        await super().close()  # don't forget this!
 
 
 
@@ -253,4 +261,5 @@ if __name__ == '__main__':
         while True:
             bot.run(BOT_TOKEN)
     except KeyboardInterrupt:
+        bot.close()
         exit()

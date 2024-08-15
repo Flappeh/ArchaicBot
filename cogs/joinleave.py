@@ -8,8 +8,6 @@ from modules.utils import logger
 from easy_pil import Editor, load_image_async, Font
 import os
 import random
-from captcha.image import ImageCaptcha
-import string
 
 class JoinLeave(commands.Cog, name="joinleave"):
     def __init__(self, bot: DiscordBot) -> None:
